@@ -1,10 +1,10 @@
 <template>
   <div class="class">
-    <b-form-input v-model="search" id="input-default" placeholder="Найти"></b-form-input>
-    <b-button
-        @click="listSort">
+    <div class="search">
+      <b-form-input v-model="search" id="input-default" placeholder="Найти"></b-form-input>
+      <b-button @click="listSort">По имени</b-button>
+    </div>
 
-      По имени</b-button>
 
     <ul>
       <li v-for="(item, listId) in getFiltered"
@@ -12,7 +12,10 @@
         <div> {{ item.title }}</div>
         <div>  {{ item.count }}</div>
         <div> {{ item.unit }}</div>
-        <b-button @click="remove">Удалить</b-button>
+        <b-button
+            @click="remove"
+            variant="outline-danger"
+            >Удалить</b-button>
       </li>
     </ul>
 
@@ -24,7 +27,7 @@
         <option>бан</option>
         <option>кг</option>
       </select>
-      <b-button @click="addNewProd" variant="outline-success">+</b-button>
+      <b-button @click="addNewProd" variant="success">+</b-button>
     </div>
   </div>
 
@@ -49,28 +52,35 @@ export default {
       title: '',
       unit: 'шт',
       count: '',
+      toggle: true
 
     }
-  },
-
-  created() {
-
-
-     // this.initList();
-
-
   },
 
   methods: {
     ...mapActions(['initList']),
 
+    // remove() {
+    //   let product = {
+    //     index: this.index,
+    //     listId: this.listId
+    //
+    //   }
+    //   this.$store.commit('remove', product)
+    // },
+
     remove(index) {
-      let product = {
-        index: index,
-        listId: this.listId
-      }
-      this.$store.commit('remove', product)
+      let list = this.$store.state.lists.find((item) => item.listId === this.listId)
+
+      // console.log(list.items)
+
+      // index = this.$store.state.find(item => item.id)
+      console.log(list.items.index)
+
+      list.items.splice(index, 1)
     },
+
+
 
 
     setProducts() {
@@ -85,37 +95,17 @@ export default {
         unit: this.unit,
         count: this.count,
         listId: this.listId,
-        // list: this.$store.state.lists.find((item) => item.listId === this.listId).items
-
       };
 
-
       this.$store.commit('addNewProd',  product)
-
-
-
 
       this.title = ''
       this.count = ''
       this.unit = 'шт'
 
-
-
-
-      // let list = this.$store.state.lists.find((item) => item.listId === this.tab).items
-
-      // localStorage.setItem('products', JSON.stringify(list))
-      //
-      // JSON.parse(localStorage.getItem('products'))
-      //
-      // localStorage.setItem('products', JSON.stringify(list))
-
-
-
     },
-
-
   },
+
   computed: {
 
     getFiltered() {
@@ -123,7 +113,7 @@ export default {
     },
     listSort() {
       return this.$store.getters.listSort(this.listId)
-    }
+    },
 
   }
 
@@ -131,5 +121,24 @@ export default {
 </script>
 
 <style scoped>
+
+.btn {
+  width: 25%;
+  height: 38px;
+}
+.search {
+  display: flex;
+  margin-bottom: 20px;
+}
+.search input {
+  margin-right: 5px;
+}
+.push-block input {
+  margin: 0;
+}
+.push-block button {
+  margin: 0;
+}
+
 
 </style>

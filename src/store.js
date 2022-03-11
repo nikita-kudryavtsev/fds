@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import helpers from "@/helpers";
+
 
 
 Vue.use(Vuex)
+Vue.config.devtools = true
 
 export default new Vuex.Store({
     state: {
@@ -36,16 +39,15 @@ export default new Vuex.Store({
                     { id: 3, title: 'Мыло', count: 1, unit: 'шт' }
                 ]
             }
-
         ],
-
 
     },
 
     getters: {
 
         getListItemsByListId: (state) => (listId) => {
-            let list = state.lists.find((item) => item.listId === listId);
+
+            let list = state.lists.find(item => item.listId === listId);
 
             return list && list.items ? list.items : [];
         },
@@ -54,50 +56,54 @@ export default new Vuex.Store({
 
             let list = getters.getListItemsByListId(listId);
 
-            if (list) {
-                return list.filter((product) => product.title.toLowerCase().includes(search.toLowerCase()))
 
-            }
-            return [];
+            return list.filter((product) => product.title.toLowerCase().includes(search.toLowerCase()))
+
+        },
+
+        listSort: (state, getters) => (listId) => {
+
+            let list = getters.getListItemsByListId(listId)
+
+            return list.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1)
+
         },
 
 
-        listSort: (state) => (tab) => {
-
-            let list = state.lists.find((item) => item.listId === tab).items
-
-            if (list) {
-                return list.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1)
-            } else {
-                return []
-            }
-        },
 
     },
     mutations: {
 
-        remove (state, payload) {
+        // remove (state, payload) {
+        //
+        //     let list = helpers.getListItems(state, payload)
+        //
+        //         list.splice(payload.index + 1, 1)
+        //
+        //
+        //
+        //     localStorage.setItem('lists', JSON.stringify(state.lists))
+        //
+        // },
 
-            let list = state.lists.find((item) => item.listId === payload.listId)
-
-            if (list) {
-
-            list.items.splice(payload.index, 1)
-
-            } else {
-                return []
-            }
-            localStorage.setItem('lists', JSON.stringify(state.lists))
-
-
-
-        },
+        // remove (state, payload) {
+        //
+        //     let list = helpers.getListItems(state, payload)
+        //         // id = list.find(item => item.id === event)
+        //     // list.splice(list.indexOf(list.items.id), 1);
+        //     list.items.splice(this.events.indexOf(payload.id), 1)
+        //
+        //
+        //
+        //     localStorage.setItem('lists', JSON.stringify(state.lists))
+        //
+        // },
 
         addNewProd(state, payload) {
 
-            let list = state.lists.find((item) => item.listId === payload.listId).items
+            let list = helpers.getListItems(state, payload).items
 
-            if (payload.title && payload.id && payload.count && !isNaN(payload.count)) {
+            if (payload.title && isNaN(payload.title) && payload.id && payload.count && !isNaN(payload.count)) {
 
                 list.push({
                     id: payload.id,
@@ -113,12 +119,6 @@ export default new Vuex.Store({
             }
 
         },
-
-        // setProducts(state, payload) {
-
-            // state.lists.find((item) => item.listId === 1).items = payload;
-
-        // },
 
         setLists(state, payload) {
             state.lists = payload;

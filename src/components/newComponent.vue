@@ -7,7 +7,7 @@
           <b-button
               v-for="list in lists"
               :key="list.listId"
-              pill variant="outline-secondary"
+              pill variant="outline-dark"
               :class="[ { active: currentListId === list.listId} ]"
               @click="currentListId = list.listId"
 
@@ -70,8 +70,8 @@ export default {
   margin-top: 70px;
 }
 
-b-button {
-  margin: 10px;
+.btn {
+  margin: 1px;
 }
 
 .push-block {
@@ -91,7 +91,5 @@ li {
 li div {
   width: 25%;
 }
-
-
 
 </style>
