@@ -9,7 +9,6 @@ Vue.config.devtools = true
 
 export default new Vuex.Store({
     state: {
-
         lists: [
             {
                 listId: 1,
@@ -61,11 +60,16 @@ export default new Vuex.Store({
 
         },
 
-        listSort: (state, getters) => (listId) => {
+        listSort: (state, getters) => (listId, sorting) => {
 
             let list = getters.getListItemsByListId(listId)
 
-            return list.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1)
+           if (sorting) {
+               return list
+           } else {
+               return list.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1)
+           }
+
 
         },
 
@@ -74,30 +78,16 @@ export default new Vuex.Store({
     },
     mutations: {
 
-        // remove (state, payload) {
-        //
-        //     let list = helpers.getListItems(state, payload)
-        //
-        //         list.splice(payload.index + 1, 1)
-        //
-        //
-        //
-        //     localStorage.setItem('lists', JSON.stringify(state.lists))
-        //
-        // },
+        remove (state, payload) {
 
-        // remove (state, payload) {
-        //
-        //     let list = helpers.getListItems(state, payload)
-        //         // id = list.find(item => item.id === event)
-        //     // list.splice(list.indexOf(list.items.id), 1);
-        //     list.items.splice(this.events.indexOf(payload.id), 1)
-        //
-        //
-        //
-        //     localStorage.setItem('lists', JSON.stringify(state.lists))
-        //
-        // },
+            let list = state.lists.find((item) => item.listId === payload.listId).items
+
+            list.splice(payload.index, 1)
+
+            localStorage.setItem('lists', JSON.stringify(state.lists))
+
+        },
+
 
         addNewProd(state, payload) {
 

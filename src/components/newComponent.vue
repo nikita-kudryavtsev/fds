@@ -17,7 +17,7 @@
         </b-list-group>
 
       </div>
-      <div class="col-4">
+      <div class="col-5">
 
         <list-component :list-id="currentListId"></list-component>
 

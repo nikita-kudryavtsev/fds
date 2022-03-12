@@ -2,20 +2,18 @@
   <div class="class">
     <div class="search">
       <b-form-input v-model="search" id="input-default" placeholder="Найти"></b-form-input>
-      <b-button @click="listSort">По имени</b-button>
+      <b-button @click="listSort(listId, false)">По имени</b-button>
     </div>
 
 
     <ul>
-      <li v-for="(item, listId) in getFiltered"
-          :key="listId">
+      <li v-for="(item, index) in getFiltered"
+          :key="index"
+      >
         <div> {{ item.title }}</div>
         <div>  {{ item.count }}</div>
         <div> {{ item.unit }}</div>
-        <b-button
-            @click="remove"
-            variant="outline-danger"
-            >Удалить</b-button>
+        <b-button @click="remove(index)">Удалить</b-button>
       </li>
     </ul>
 
@@ -60,27 +58,13 @@ export default {
   methods: {
     ...mapActions(['initList']),
 
-    // remove() {
-    //   let product = {
-    //     index: this.index,
-    //     listId: this.listId
-    //
-    //   }
-    //   this.$store.commit('remove', product)
-    // },
-
     remove(index) {
-      let list = this.$store.state.lists.find((item) => item.listId === this.listId)
-
-      // console.log(list.items)
-
-      // index = this.$store.state.find(item => item.id)
-      console.log(list.items.index)
-
-      list.items.splice(index, 1)
+      let product = {
+        index: index,
+        listId: this.listId
+      }
+      this.$store.commit('remove', product)
     },
-
-
 
 
     setProducts() {
@@ -111,8 +95,13 @@ export default {
     getFiltered() {
       return this.$store.getters.getFiltered(this.search, this.listId)
     },
+    // listSort() {
+    //   return this.$store.getters.listSort(this.listId)
+    // },
+
     listSort() {
-      return this.$store.getters.listSort(this.listId)
+
+      return this.$store.getters.listSort(this.listId, false)
     },
 
   }
@@ -135,6 +124,7 @@ export default {
 }
 .push-block input {
   margin: 0;
+  width: 100%;
 }
 .push-block button {
   margin: 0;
