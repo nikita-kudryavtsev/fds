@@ -4,7 +4,7 @@ export default {
 
             let list = state.lists.find((item) => item.listId === payload.listId)
 
-            return list && list.items ? list : []
+            return list && list.items ? list.items : []
 
     }
 }

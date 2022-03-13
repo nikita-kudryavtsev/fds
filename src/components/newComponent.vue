@@ -29,6 +29,7 @@
 </template>
 
 <script>
+
 import {mapActions, mapState} from "vuex";
 import ListComponent from "@/components/products/list";
 
@@ -41,8 +42,7 @@ export default {
 
   data() {
     return {
-      currentListId: 1,
-
+      currentListId: 1
     }
   },
   created() {
@@ -59,6 +59,7 @@ export default {
     },
 
     ...mapState(['lists'])
+
   }
 
 }
@@ -68,28 +69,6 @@ export default {
 
 .main {
   margin-top: 70px;
-}
-
-.btn {
-  margin: 1px;
-}
-
-.push-block {
-  display: flex;
-  justify-content: space-between;
-}
-
-.push-block input {
-  margin: 5px;
-  padding: 5px;
-}
-li {
-  display: flex;
-  font-size: 20px;
-  width: 100%;
-}
-li div {
-  width: 25%;
 }
 
 </style>

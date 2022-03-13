@@ -2,13 +2,11 @@
   <div class="class">
     <div class="search">
       <b-form-input v-model="search" id="input-default" placeholder="Найти"></b-form-input>
-      <b-button @click="listSort(listId, false)">По имени</b-button>
     </div>
-
-
     <ul>
       <li v-for="(item, index) in getFiltered"
           :key="index"
+          v-bind="listSort"
       >
         <div> {{ item.title }}</div>
         <div>  {{ item.count }}</div>
@@ -16,7 +14,6 @@
         <b-button @click="remove(index)">Удалить</b-button>
       </li>
     </ul>
-
     <div class="push-block">
       <input v-model="title" placeholder="Продукт" type="text">
       <input v-model="count" placeholder="Кол-во">
@@ -25,22 +22,16 @@
         <option>бан</option>
         <option>кг</option>
       </select>
-      <b-button @click="addNewProd" variant="success">+</b-button>
+      <b-button @click="addNewProd"  variant="success">+</b-button>
     </div>
   </div>
-
-
 </template>
 
 <script>
 
-import {mapActions} from "vuex";
-
 
 export default {
-
   name: "ListComponent",
-
   props: ['listId'],
 
   data() {
@@ -50,13 +41,10 @@ export default {
       title: '',
       unit: 'шт',
       count: '',
-      toggle: true
-
     }
   },
 
   methods: {
-    ...mapActions(['initList']),
 
     remove(index) {
       let product = {
@@ -65,12 +53,6 @@ export default {
       }
       this.$store.commit('remove', product)
     },
-
-
-    setProducts() {
-      this.$store.commit('setProducts')
-    },
-
 
     addNewProd() {
       let product = {
@@ -86,27 +68,25 @@ export default {
       this.title = ''
       this.count = ''
       this.unit = 'шт'
-
     },
   },
 
   computed: {
 
     getFiltered() {
+
       return this.$store.getters.getFiltered(this.search, this.listId)
+
     },
-    // listSort() {
-    //   return this.$store.getters.listSort(this.listId)
-    // },
 
     listSort() {
 
-      return this.$store.getters.listSort(this.listId, false)
+      return this.$store.getters.listSort(this.listId)
+
     },
-
   }
-
 }
+
 </script>
 
 <style scoped>
@@ -114,6 +94,7 @@ export default {
 .btn {
   width: 25%;
   height: 38px;
+  margin: 1px;
 }
 .search {
   display: flex;
@@ -122,13 +103,32 @@ export default {
 .search input {
   margin-right: 5px;
 }
+.push-block {
+  display: flex;
+  justify-content: space-between;
+}
 .push-block input {
   margin: 0;
   width: 100%;
+  padding: 5px;
+}
+.push-block input:nth-child(2){
+  width: 30%;
 }
 .push-block button {
   margin: 0;
 }
-
+li {
+  display: flex;
+  font-size: 20px;
+  width: 100%;
+}
+li div {
+  width: 25%;
+}
+li div:nth-child(2) {
+  text-align: right;
+  padding-right: 5px;
+}
 
 </style>

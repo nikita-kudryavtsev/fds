@@ -55,43 +55,30 @@ export default new Vuex.Store({
 
             let list = getters.getListItemsByListId(listId);
 
-
             return list.filter((product) => product.title.toLowerCase().includes(search.toLowerCase()))
-
         },
 
-        listSort: (state, getters) => (listId, sorting) => {
+        listSort: (state, getters) => (listId) => {
 
             let list = getters.getListItemsByListId(listId)
 
-           if (sorting) {
-               return list
-           } else {
-               return list.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1)
-           }
-
-
+            return list.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1)
         },
-
-
-
     },
     mutations: {
 
         remove (state, payload) {
 
-            let list = state.lists.find((item) => item.listId === payload.listId).items
+            let list = helpers.getListItems(state, payload)
 
             list.splice(payload.index, 1)
 
             localStorage.setItem('lists', JSON.stringify(state.lists))
-
         },
-
 
         addNewProd(state, payload) {
 
-            let list = helpers.getListItems(state, payload).items
+            let list = helpers.getListItems(state, payload)
 
             if (payload.title && isNaN(payload.title) && payload.id && payload.count && !isNaN(payload.count)) {
 
@@ -101,13 +88,12 @@ export default new Vuex.Store({
                     count: payload.count,
                     unit: payload.unit,
                 })
+                alert('Продукт успешно добавлен!')
 
                 localStorage.setItem('lists', JSON.stringify(state.lists))
-
             } else {
-                alert('Проверьте правильность введенных данных')
+                alert('Проверьте правильность введенных данных!')
             }
-
         },
 
         setLists(state, payload) {
@@ -123,7 +109,7 @@ export default new Vuex.Store({
             if (lists) {
                 commit('setLists', lists);
             }
-        }
-    }
+        },
+    },
 
 })
