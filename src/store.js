@@ -5,7 +5,6 @@ import helpers from "@/helpers";
 
 
 Vue.use(Vuex)
-Vue.config.devtools = true
 
 export default new Vuex.Store({
     state: {
