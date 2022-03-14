@@ -4,16 +4,17 @@
       <b-form-input v-model="search" id="input-default" placeholder="Найти"></b-form-input>
     </div>
     <ul>
-      <li v-for="(item, index) in getFiltered"
-          :key="index"
+      <li v-for="(item, id) in getFiltered"
+          :key="id"
           v-bind="listSort"
       >
         <div> {{ item.title }}</div>
         <div>  {{ item.count }}</div>
         <div> {{ item.unit }}</div>
-        <b-button @click="remove(index)">Удалить</b-button>
+        <b-button @click="remove(id)">Удалить</b-button>
       </li>
     </ul>
+
     <div class="push-block">
       <input v-model="title" placeholder="Продукт" type="text">
       <input v-model="count" placeholder="Кол-во">
@@ -37,7 +38,7 @@ export default {
   data() {
     return {
       search: '',
-      id: 5,
+      id: this.$store.state.lists.find(item => item.listId = this.listId).items.length,
       title: '',
       unit: 'шт',
       count: '',
@@ -46,9 +47,9 @@ export default {
 
   methods: {
 
-    remove(index) {
+    remove(id) {
       let product = {
-        index: index,
+        index: id,
         listId: this.listId
       }
       this.$store.commit('remove', product)
@@ -56,7 +57,7 @@ export default {
 
     addNewProd() {
       let product = {
-        id: this.id++,
+        id: ++this.id,
         title: this.title,
         unit: this.unit,
         count: this.count,
@@ -69,6 +70,8 @@ export default {
       this.count = ''
       this.unit = 'шт'
     },
+
+
   },
 
   computed: {
@@ -84,6 +87,7 @@ export default {
       return this.$store.getters.listSort(this.listId)
 
     },
+
   }
 }
 
