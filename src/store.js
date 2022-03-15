@@ -63,6 +63,13 @@ export default new Vuex.Store({
 
             return list.sort((a, b) => a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1)
         },
+        itemsCounter: (state, getters) => (listId) => {
+
+            let list = getters.getListItemsByListId(listId)
+
+            return list.length
+
+        }
     },
     mutations: {
 
@@ -97,7 +104,25 @@ export default new Vuex.Store({
 
         setLists(state, payload) {
             state.lists = payload;
+        },
+
+        addNewList(state, payload) {
+            let lists = state.lists
+
+            if (lists && payload.listId && payload.title && isNaN(payload.title)  && payload.items) {
+                lists.push({
+                    listId: payload.listId,
+                    title: payload.title,
+                    items: payload.items
+                })
+                localStorage.setItem('lists', JSON.stringify(state.lists))
+            } else {
+                alert('Проверьте правильность введенных данных!')
+            }
+
+
         }
+
 
     },
 

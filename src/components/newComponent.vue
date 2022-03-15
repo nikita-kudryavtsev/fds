@@ -1,7 +1,9 @@
 <template>
   <div class="main">
     <div class="row">
+
       <div class="col-3 offset-2">
+
         <b-list-group >
 
           <b-button
@@ -15,12 +17,21 @@
           </b-button>
 
         </b-list-group>
+        <b-button
+            class="addList"
+            @click="showModal">
+          Добавить список
+        </b-button>
 
       </div>
       <div class="col-5">
 
         <list-component :list-id="currentListId"></list-component>
+        <modal-window
+            v-if="isModalVisible"
+            v-on:closeModal="closeModal">
 
+        </modal-window>
       </div>
 
     </div>
@@ -32,17 +43,22 @@
 
 import {mapActions, mapState} from "vuex";
 import ListComponent from "@/components/products/list";
+import modalWindow from "@/components/modalWindow";
 
 
 export default {
   name: "newComponent",
   components: {
     ListComponent,
+    modalWindow
+
   },
 
   data() {
     return {
-      currentListId: 1
+      currentListId: 1,
+      isModalVisible: false
+
     }
   },
   created() {
@@ -51,13 +67,15 @@ export default {
 
   },
   methods: {
-    ...mapActions(['initList'])
+    ...mapActions(['initList']),
+    showModal() {
+      this.isModalVisible = true
+    },
+    closeModal() {
+      this.isModalVisible = false
+    }
   },
   computed: {
-    currentTabComponent: function() {
-      return this.currentListId;
-    },
-
     ...mapState(['lists'])
 
   }
@@ -70,5 +88,11 @@ export default {
 .main {
   margin-top: 70px;
 }
+.addList {
+  display: block;
+  margin: 20px;
+}
+
+
 
 </style>

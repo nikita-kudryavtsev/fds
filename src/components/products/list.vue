@@ -3,11 +3,14 @@
     <div class="search">
       <b-form-input v-model="search" id="input-default" placeholder="Найти"></b-form-input>
     </div>
+    <h2 v-if="itemsCounter > 0">Всего товаров: {{ itemsCounter }}</h2>
+    <h2 v-else> Корзина пуста </h2>
     <ul>
       <li v-for="(item, id) in getFiltered"
           :key="id"
           v-bind="listSort"
       >
+
         <div> {{ item.title }}</div>
         <div>  {{ item.count }}</div>
         <div> {{ item.unit }}</div>
@@ -23,7 +26,7 @@
         <option>бан</option>
         <option>кг</option>
       </select>
-      <b-button @click="addNewProd"  variant="success">+</b-button>
+      <b-button @click="addNewProd" variant="success">+</b-button>
     </div>
   </div>
 </template>
@@ -42,6 +45,7 @@ export default {
       title: '',
       unit: 'шт',
       count: '',
+
     }
   },
 
@@ -87,8 +91,12 @@ export default {
       return this.$store.getters.listSort(this.listId)
 
     },
+    itemsCounter() {
+      return this.$store.getters.itemsCounter(this.listId)
+    }
 
-  }
+  },
+
 }
 
 </script>
@@ -134,5 +142,6 @@ li div:nth-child(2) {
   text-align: right;
   padding-right: 5px;
 }
+
 
 </style>
